@@ -232,11 +232,12 @@ export default function FloorPlanExplorer({ onOpenLeadModal }) {
                   alt={currentPlan.title}
                   style={{
                     width: '100%',
-                    height: '280px',
-                    objectFit: 'cover',
+                    height: '320px',
+                    objectFit: 'contain',
                     borderRadius: '6px',
-                    filter: 'blur(16px) brightness(0.35)',
-                    opacity: 0.4
+                    filter: 'blur(5px) brightness(0.85)',
+                    opacity: 0.75,
+                    transform: 'scale(1.02)'
                   }}
                 />
                 <div
@@ -249,8 +250,8 @@ export default function FloorPlanExplorer({ onOpenLeadModal }) {
                     justifyContent: 'center',
                     gap: '10px',
                     padding: '20px',
-                    background: 'rgba(7, 10, 16, 0.75)',
-                    backdropFilter: 'blur(8px)'
+                    background: 'rgba(7, 10, 16, 0.52)',
+                    backdropFilter: 'blur(2px)'
                   }}
                 >
                   <div
