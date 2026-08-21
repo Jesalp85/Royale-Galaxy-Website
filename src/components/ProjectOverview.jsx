@@ -140,9 +140,9 @@ export default function ProjectOverview() {
           }}
         >
           {[
-            { val: '2,655 sq.m', label: 'Project Built-up Area' },
-            { val: 'Wing D', label: '6 Habitable Floors' },
-            { val: '67 Units', label: 'Residential & Commercial' },
+            { val: '6,629.01 sq.mt', label: 'Project Built-up Area' },
+            { val: 'Royale Galaxy', label: 'Flagship Luxury Project' },
+            { val: '135 Units', label: 'Residential & Commercial' },
             { val: '85 Bays', label: 'Dedicated Parking Spaces' }
           ].map((stat, idx) => (
             <div
