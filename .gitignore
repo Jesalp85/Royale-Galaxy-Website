@@ -7,13 +7,12 @@ yarn-debug.log*
 # Dependencies
 node_modules/
 
-# Production build output
-dist/
-dist-ssr/
-
 # OS metadata
 .DS_Store
 Thumbs.db
 
 # Vite cache
 .vite/
+
+# Zip Archives
+*.zip
