@@ -14,5 +14,9 @@ Thumbs.db
 # Vite cache
 .vite/
 
+# Environment Variables
+.env
+.env.local
+
 # Zip Archives
 *.zip

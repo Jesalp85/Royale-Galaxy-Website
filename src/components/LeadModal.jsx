@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { X, CheckCircle2, Download, ShieldCheck, FileText, Loader2 } from 'lucide-react';
+import { X, CheckCircle2, Download, ShieldCheck, FileText, Loader2, Mail } from 'lucide-react';
 
 export default function LeadModal({ isOpen, onClose, initialIntent = 'Book Site Visit' }) {
   const [fullName, setFullName] = useState('');
   const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
   const [phoneError, setPhoneError] = useState('');
+  const [emailError, setEmailError] = useState('');
   const [unitType, setUnitType] = useState('1 BHK');
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -15,26 +17,45 @@ export default function LeadModal({ isOpen, onClose, initialIntent = 'Book Site 
     e.preventDefault();
     if (!fullName.trim() || isSubmitting) return;
 
+    let hasError = false;
+
+    // Email validation
+    const cleanEmail = email.trim();
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!cleanEmail || !emailRegex.test(cleanEmail)) {
+      setEmailError('Please enter a valid email address to receive confirmation.');
+      hasError = true;
+    } else {
+      setEmailError('');
+    }
+
     // Strict Indian 10-digit mobile number validation
     const cleanDigits = phone.replace(/\D/g, '');
     if (!/^[6-9]\d{9}$/.test(cleanDigits)) {
       setPhoneError('Please enter a valid 10-digit Indian mobile number starting with 6, 7, 8, or 9.');
-      return;
+      hasError = true;
+    } else {
+      setPhoneError('');
     }
 
-    setPhoneError('');
+    if (hasError) return;
+
     setIsSubmitting(true);
 
     const formattedPhone = `+91 ${cleanDigits}`;
+    const autoresponseMessage = `Dear ${fullName.trim()},\n\nThank you for expressing interest in Royale Galaxy Kalyan East!\n\nWe have successfully received your inquiry for: ${initialIntent} (${unitType}).\n\nOur official sales desk team will contact you shortly at ${formattedPhone} to provide complete details, unit floor plans, pricing sheets, and priority site visit arrangements.\n\nWarm regards,\nRoyale Galaxy Sales Team\nEmail: Royalegalaxysales@gmail.com\nWebsite: www.royalegroup.org`;
 
     const payload = {
       name: fullName.trim(),
+      email: cleanEmail,
       phone: formattedPhone,
       configuration: unitType,
       intent: initialIntent,
       project: 'Royale Galaxy Kalyan East',
       submittedAt: new Date().toLocaleString(),
       _subject: `🚨 New Royale Galaxy Lead: ${fullName.trim()} (${formattedPhone})`,
+      _replyto: cleanEmail,
+      _autoresponse: autoresponseMessage,
       _template: 'table',
       _captcha: 'false'
     };
@@ -50,9 +71,9 @@ export default function LeadModal({ isOpen, onClose, initialIntent = 'Book Site 
       console.error('Local backup save error:', err);
     }
 
-    // Send direct email lead to jesalp85@gmail.com
+    // Send lead directly to Royalegalaxysales@gmail.com via FormSubmit (from submissions@formsubmit.co)
     try {
-      await fetch('https://formsubmit.co/ajax/jesalp85@gmail.com', {
+      await fetch('https://formsubmit.co/ajax/Royalegalaxysales@gmail.com', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -177,6 +198,44 @@ export default function LeadModal({ isOpen, onClose, initialIntent = 'Book Site 
 
               <div>
                 <label style={{ display: 'block', color: 'var(--text-secondary)', fontSize: '0.8rem', marginBottom: '4px', fontWeight: '600' }}>
+                  Email Address (For Confirmation Mail) *
+                </label>
+                <input
+                  type="email"
+                  required
+                  placeholder="name@example.com"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    if (emailError) setEmailError('');
+                  }}
+                  onBlur={() => {
+                    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+                      setEmailError('Please enter a valid email address.');
+                    } else {
+                      setEmailError('');
+                    }
+                  }}
+                  style={{
+                    width: '100%',
+                    padding: '10px 14px',
+                    borderRadius: '8px',
+                    background: 'rgba(7, 10, 16, 0.8)',
+                    border: emailError ? '1px solid #EF4444' : '1px solid rgba(255, 255, 255, 0.12)',
+                    color: '#FFF',
+                    fontSize: '0.88rem',
+                    outline: 'none'
+                  }}
+                />
+                {emailError && (
+                  <div style={{ color: '#F87171', fontSize: '0.76rem', marginTop: '4px', fontWeight: '500' }}>
+                    {emailError}
+                  </div>
+                )}
+              </div>
+
+              <div>
+                <label style={{ display: 'block', color: 'var(--text-secondary)', fontSize: '0.8rem', marginBottom: '4px', fontWeight: '600' }}>
                   Mobile Number (10-Digit Indian Mobile) *
                 </label>
                 <div style={{ display: 'flex', alignItems: 'center', position: 'relative' }}>
@@ -297,8 +356,11 @@ export default function LeadModal({ isOpen, onClose, initialIntent = 'Book Site 
             <h3 className="font-display text-gold" style={{ fontSize: '1.5rem', marginBottom: '6px' }}>
               Inquiry Confirmed!
             </h3>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '0.88rem', marginBottom: '20px' }}>
-              Thank you, <strong>{fullName}</strong>. Our Royale Galaxy sales team will contact you at <strong>{phone}</strong> shortly.
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.88rem', marginBottom: '14px' }}>
+              Thank you, <strong>{fullName}</strong>. A confirmation email has been sent to <strong style={{ color: 'var(--gold-light)' }}>{email}</strong> from <strong>Royalegalaxysales@gmail.com</strong>.
+            </p>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.84rem', marginBottom: '20px' }}>
+              Our Royale Galaxy sales team will contact you at <strong>{phone}</strong> shortly.
             </p>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -315,3 +377,4 @@ export default function LeadModal({ isOpen, onClose, initialIntent = 'Book Site 
     </div>
   );
 }
+
