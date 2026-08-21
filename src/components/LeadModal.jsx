@@ -39,11 +39,13 @@ export default function LeadModal({ isOpen, onClose, initialIntent = 'Book Site 
       _captcha: 'false'
     };
 
-    // Store local backup lead record
+    // Store local backup lead record & mark content unlocked
     try {
       const existing = JSON.parse(localStorage.getItem('royale_galaxy_leads') || '[]');
       existing.push(payload);
       localStorage.setItem('royale_galaxy_leads', JSON.stringify(existing));
+      localStorage.setItem('royale_galaxy_unlocked', 'true');
+      window.dispatchEvent(new Event('royale_unlocked'));
     } catch (err) {
       console.error('Local backup save error:', err);
     }

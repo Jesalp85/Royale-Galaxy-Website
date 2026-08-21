@@ -1,9 +1,20 @@
-import React, { useState } from 'react';
-import { Ruler, Check, Sparkles, Download } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Ruler, Check, Sparkles, Download, Lock } from 'lucide-react';
 
 export default function FloorPlanExplorer({ onOpenLeadModal }) {
   const [activePlan, setActivePlan] = useState('1bhk');
   const [activeSpecTab, setActiveSpecTab] = useState('living');
+  const [isUnlocked, setIsUnlocked] = useState(() => {
+    return localStorage.getItem('royale_galaxy_unlocked') === 'true';
+  });
+
+  useEffect(() => {
+    const handleUnlock = () => {
+      setIsUnlocked(true);
+    };
+    window.addEventListener('royale_unlocked', handleUnlock);
+    return () => window.removeEventListener('royale_unlocked', handleUnlock);
+  }, []);
 
   const plans = {
     '1bhk': {
@@ -169,35 +180,106 @@ export default function FloorPlanExplorer({ onOpenLeadModal }) {
           {/* Left: Floor Plan Graphic */}
           <div
             className="hover-card-lift"
+            onClick={() => {
+              if (!isUnlocked) {
+                onOpenLeadModal(`Unlock Layout Drawing: ${currentPlan.title}`);
+              }
+            }}
             style={{
-              background: '#FFF',
+              position: 'relative',
+              background: isUnlocked ? '#FFF' : 'rgba(14, 20, 34, 0.95)',
               borderRadius: '12px',
               padding: '12px',
               boxShadow: '0 8px 24px rgba(0, 0, 0, 0.5)',
               textAlign: 'center',
-              cursor: 'pointer'
+              cursor: 'pointer',
+              overflow: 'hidden',
+              minHeight: '320px',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              border: isUnlocked ? 'none' : '1px solid var(--border-gold-bright)'
             }}
           >
-            <img
-              src={currentPlan.layoutImg}
-              alt={currentPlan.title}
-              style={{
-                maxWidth: '100%',
-                maxHeight: '360px',
-                objectFit: 'contain',
-                borderRadius: '6px'
-              }}
-            />
-            <div
-              style={{
-                fontSize: '0.7rem',
-                color: '#64748B',
-                marginTop: '8px',
-                fontStyle: 'italic'
-              }}
-            >
-              *RERA Carpet Area includes internal wall area along with room dimensions.
-            </div>
+            {isUnlocked ? (
+              <>
+                <img
+                  src={currentPlan.layoutImg}
+                  alt={currentPlan.title}
+                  style={{
+                    maxWidth: '100%',
+                    maxHeight: '360px',
+                    objectFit: 'contain',
+                    borderRadius: '6px'
+                  }}
+                />
+                <div
+                  style={{
+                    fontSize: '0.7rem',
+                    color: '#64748B',
+                    marginTop: '8px',
+                    fontStyle: 'italic'
+                  }}
+                >
+                  *RERA Carpet Area includes internal wall area along with room dimensions.
+                </div>
+              </>
+            ) : (
+              <>
+                <img
+                  src={currentPlan.layoutImg}
+                  alt={currentPlan.title}
+                  style={{
+                    width: '100%',
+                    height: '280px',
+                    objectFit: 'cover',
+                    borderRadius: '6px',
+                    filter: 'blur(16px) brightness(0.35)',
+                    opacity: 0.4
+                  }}
+                />
+                <div
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '10px',
+                    padding: '20px',
+                    background: 'rgba(7, 10, 16, 0.75)',
+                    backdropFilter: 'blur(8px)'
+                  }}
+                >
+                  <div
+                    style={{
+                      width: '52px',
+                      height: '52px',
+                      borderRadius: '50%',
+                      background: 'var(--gold-gradient)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: '#070A10',
+                      boxShadow: '0 0 25px rgba(212, 175, 55, 0.6)'
+                    }}
+                  >
+                    <Lock size={24} />
+                  </div>
+                  <h4 className="font-serif text-gold" style={{ fontSize: '1.15rem', textAlign: 'center' }}>
+                    Floor Plan & Carpet Area Locked
+                  </h4>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.82rem', textAlign: 'center', maxWidth: '280px', lineHeight: '1.4' }}>
+                    Fill out the quick inquiry form to instantly unlock full layout drawings & RERA carpet area.
+                  </p>
+                  <button className="btn-gold pulse-animation" style={{ padding: '9px 18px', fontSize: '0.82rem', marginTop: '4px' }}>
+                    <Lock size={14} /> Unlock Floor Plan Now
+                  </button>
+                </div>
+              </>
+            )}
           </div>
 
           {/* Right: Plan Metrics & Highlights */}
@@ -219,7 +301,24 @@ export default function FloorPlanExplorer({ onOpenLeadModal }) {
                 gap: '6px'
               }}
             >
-              <Ruler size={16} /> {currentPlan.carpet}
+              <Ruler size={16} />{' '}
+              {isUnlocked ? (
+                currentPlan.carpet
+              ) : (
+                <span
+                  onClick={() => onOpenLeadModal(`Unlock Carpet Area: ${currentPlan.title}`)}
+                  style={{
+                    color: 'var(--gold-light)',
+                    cursor: 'pointer',
+                    textDecoration: 'underline',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px'
+                  }}
+                >
+                  <Lock size={14} /> Carpet Area Locked (Fill Form to View)
+                </span>
+              )}
             </div>
 
             <div style={{ marginBottom: '24px' }}>
