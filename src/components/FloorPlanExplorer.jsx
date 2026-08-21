@@ -139,10 +139,10 @@ export default function FloorPlanExplorer({ onOpenLeadModal }) {
         {/* Plan Category Tabs */}
         <div className="horizontal-scroll-track" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '10px', marginBottom: '32px', width: '100%' }}>
           {[
-            { id: '1bhk', label: '1 BHK (350 Sq.Ft)' },
-            { id: '2bhk', label: '2 BHK (478-487 Sq.Ft)' },
+            { id: '1bhk', label: '1 BHK' },
+            { id: '2bhk', label: '2 BHK' },
             { id: 'typical', label: 'Typical Tower Plan' },
-            { id: 'commercial', label: 'Ground Floor Shops (1-26)' }
+            { id: 'commercial', label: 'Ground Floor Shops' }
           ].map((tab) => (
             <button
               key={tab.id}
