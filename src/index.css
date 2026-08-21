@@ -401,4 +401,24 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, label {
     width: 50px !important;
     height: 50px !important;
   }
+
+  .footer-bottom-bar {
+    justify-content: center !important;
+    text-align: center !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 14px !important;
+  }
+
+  .footer-copyright-text {
+    justify-content: center !important;
+    text-align: center !important;
+    flex-direction: column !important;
+    gap: 4px !important;
+    width: 100% !important;
+  }
+
+  .footer-divider {
+    display: none !important;
+  }
 }

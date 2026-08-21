@@ -148,6 +148,7 @@ export default function Footer({ onOpenLeadModal }) {
 
         {/* Bottom Bar */}
         <div
+          className="footer-bottom-bar"
           style={{
             borderTop: '1px solid rgba(255, 255, 255, 0.06)',
             marginTop: '28px',
@@ -161,9 +162,9 @@ export default function Footer({ onOpenLeadModal }) {
             color: 'var(--text-secondary)'
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
+          <div className="footer-copyright-text" style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
             <span>© {new Date().getFullYear()} Royale Group. All Rights Reserved.</span>
-            <span style={{ opacity: 0.4 }}>|</span>
+            <span className="footer-divider" style={{ opacity: 0.4 }}>|</span>
             <span>
               Design & Developed by{' '}
               <a
