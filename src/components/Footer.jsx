@@ -161,8 +161,27 @@ export default function Footer({ onOpenLeadModal }) {
             color: 'var(--text-secondary)'
           }}
         >
-          <div>
-            © {new Date().getFullYear()} Royale Group. All Rights Reserved. Crafted with perfection.
+          <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
+            <span>© {new Date().getFullYear()} Royale Group. All Rights Reserved.</span>
+            <span style={{ opacity: 0.4 }}>|</span>
+            <span>
+              Design & Developed by{' '}
+              <a
+                href="https://arhamtechnology.com/"
+                target="_blank"
+                rel="noreferrer"
+                style={{
+                  color: 'var(--gold-light)',
+                  textDecoration: 'none',
+                  fontWeight: '600',
+                  transition: 'color 0.2s ease'
+                }}
+                onMouseEnter={(e) => (e.target.style.color = '#FFF')}
+                onMouseLeave={(e) => (e.target.style.color = 'var(--gold-light)')}
+              >
+                Arham Technology
+              </a>
+            </span>
           </div>
           <button
             onClick={scrollToTop}
